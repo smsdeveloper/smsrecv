@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="XX_DL">
+  <resultMap class="com.slf.engine.bo.XxDl" id="ibatorgenerated_BaseResultMap">
+    <result column="DLID" jdbcType="DECIMAL" property="dlid" />
+  </resultMap>
+  
+  <resultMap class="com.slf.engine.bo.XxDl" id="result1">
+    <result column="DLID" jdbcType="DECIMAL" property="dlid" />
+    <result column="WGYHBZ" jdbcType="VARCHAR" property="wgyhbz" />
+  </resultMap>
+  
+   <select id="selectByFsh" parameterClass="com.slf.engine.bo.XxDl" resultMap="ibatorgenerated_BaseResultMap">
+  	select t.dlid
+	  from $tableUser$xx_dl t
+	 where t.zhm = #zhm# 
+  	</select> 
+
+
+   <select id="checkDlzhm" parameterClass="com.slf.engine.bo.XxDl" resultMap="result1">
+  	select t.dlid,t.wgyhbz,a.nrzs
+	  from $tableUser$xx_dl t inner join $tableUser$xx_dljg a on a.dlid = t.dlid
+	 where t.zhm = #zhm#
+  	</select> 
+  	
+</sqlMap>

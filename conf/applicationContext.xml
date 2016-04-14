@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+
+	<!-- Configurer that replaces ${...} placeholders with values from a properties file -->
+	<!-- (in this case, JDBC-related settings for the dataSource definition below) -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+			<property name="location" value="conf/datasource.properties"/>
+	</bean>
+
+	<!-- Local C3P0 DataSource that works in any environment -->
+	<!-- See JPetStore for an example of using Apache Commons DBCP as alternative -->
+	<!-- (Both DataSource implementations have a "close" method to be called on shutdown) -->
+	<bean id="dataSource" class="com.slf.common.datasource.MyDataSource" destroy-method="close">
+		<property name="driverClassName" value="${oracle.jdbc.driver}"/>
+		<property name="url" value="${oracle.jdbc.url}"/>
+		<property name="username" value="${oracle.jdbc.username}"/>
+		<property name="password" value="${oracle.jdbc.password}"/>
+		<property name="initialSize" value="${oracle.jdbc.initialSize}"/>
+		<property name="maxActive"><value>${oracle.jdbc.maxActive}</value></property>  
+	    <property name="maxIdle"><value>${oracle.jdbc.maxIdle}</value></property>  
+	    <property name="minIdle" value="${oracle.jdbc.minIdle}"/>
+	    <property name="maxWait"><value>${oracle.jdbc.maxWait}</value></property> 
+	</bean>
+
+	<bean id="nativeJdbcExtractor" class="org.springframework.jdbc.support.nativejdbc.CommonsDbcpNativeJdbcExtractor" lazy-init="true" />  
+	
+	<bean id="oracleLobHandler" class="org.springframework.jdbc.support.lob.OracleLobHandler" lazy-init="true">  
+		<property name="nativeJdbcExtractor">  
+			<ref local="nativeJdbcExtractor"/>  
+		</property> 
+	</bean>
+
+	<!-- ibatis -->
+	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">  
+		<property name="configLocation" value="classpath:conf/sql-map-config.xml" />  
+		<property name="dataSource" ref="dataSource" /> 
+		<property name="lobHandler">  
+			<ref local="oracleLobHandler" />  
+		</property>   
+	</bean>
+	
+	<bean id="sqlMapClientTemplate" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+		<property name="sqlMapClient">
+			<ref local="sqlMapClient"/>
+		</property>
+	</bean>
+	
+	<bean id="baseDao" class="com.slf.engine.base.BaseDaoImpl">
+		<property name="sqlMapClientTemplate">
+			<ref local="sqlMapClientTemplate"/>
+		</property>
+	</bean>
+	
+	
+	<bean id="TDCOMMON" class="com.slf.engine.services.impl.CommonService"/>
+	
+	<bean id="TD1001" class="com.slf.engine.services.impl.WenZhouYDServiceImpl"/> 
+	<bean id="TD1003" class="com.slf.engine.services.impl.WuXiYDServiceImpl"/> 
+	<bean id="TD2001" class="com.slf.engine.services.impl.HaoyitongServiceImpl"/>
+	<bean id="TD3001" class="com.slf.engine.services.impl.NingBoDxServiceImpl"/>
+	<bean id="TD2002" class="com.slf.engine.services.impl.ZjLtServiceImpl"/>
+	<bean id="TD2003" class="com.slf.engine.services.impl.ZjLtServiceImpl"/>
+	<bean id="TD1006" class="com.slf.engine.services.impl.WuXiYDServiceImpl"/>
+	<bean id="TD3002" class="com.slf.engine.services.impl.TD10690410ServiceImpl"/>
+	<bean id="TD2004" class="com.slf.engine.services.impl.TD10690410ServiceImpl"/>
+</beans>
