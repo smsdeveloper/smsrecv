@@ -21,6 +21,12 @@
   	select t.dlid,t.wgyhbz,a.nrzs
 	  from $tableUser$xx_dl t inner join $tableUser$xx_dljg a on a.dlid = t.dlid
 	 where t.zhm = #zhm#
+  	</select>
+  	
+  	<select id="checkDljrhppbz" parameterClass="com.slf.engine.bo.XxDl" resultMap="result1">
+  	select t.dlid,t.wgyhbz,a.nrzs
+	  from $tableUser$xx_dl t inner join $tableUser$xx_dljg a on a.dlid = t.dlid
+	 where t.jrhppbz = 1 and t.zhm = #zhm#
   	</select> 
   	
 </sqlMap>

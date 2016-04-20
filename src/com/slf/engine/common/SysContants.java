@@ -19,4 +19,6 @@ public class SysContants {
 	public static final String SMS_URL = ReadProperties.getProp(CONFIG_FILE_NAME).getProperty("sms.url");
 	public static final String SMS_NAME = ReadProperties.getProp(CONFIG_FILE_NAME).getProperty("sms.name");
 	public static final String SMS_AUTH = ReadProperties.getProp(CONFIG_FILE_NAME).getProperty("sms.auth");
+	
+	public static final int ZHM_LEN = Integer.parseInt(ReadProperties.getProp(CONFIG_FILE_NAME).getProperty("zhm.len"));
 }
